@@ -16,11 +16,11 @@ export class TodoQuery extends Query<TodoState> {
     return this.select((state) => state.todos);
   }
 
-  getLoaded(): Observable<Boolean> {
+  getLoaded(): Observable<boolean> {
     return this.select((state) => state.isLoaded);
   }
 
-  getLoading(): Observable<Boolean> {
+  getLoading(): Observable<boolean> {
     return this.selectLoading();
   }
 }
