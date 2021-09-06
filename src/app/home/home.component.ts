@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { filter, switchMap, take } from 'rxjs/operators';
+import { TodoQuery } from '../state/query';
+import { TodoStore } from '../state/store';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +11,51 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  constructor(private router: Router) {}
+  loading = false;
+  todos = [];
+  constructor(
+    private router: Router,
+    private todoQuery: TodoQuery,
+    private todoStore: TodoStore,
+    private apiService: ApiService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.todoQuery.getLoading().subscribe((res) => {
+      this.loading = res;
+      console.log(this.loading);
+    });
+
+    this.todoQuery.getTodos().subscribe((res) => {
+      this.todos = res;
+      console.log(this.todos)
+    });
+
+    this.todoQuery
+      .getLoaded() // esto trae falso
+      .pipe(
+        take(1),
+        filter((res) => !res),
+        switchMap(() => {
+          this.todoStore.setLoading(true);
+          return this.apiService.getTodos();
+        })
+      )
+      .subscribe(
+        (res) => {
+          this.todoStore.update((state) => {
+            return {
+              todos: res,
+            };
+          });
+          this.todoStore.setLoading(false);
+        },
+        (err) => {
+          console.log(err);
+          this.todoStore.setLoading(false);
+        }
+      );
+  }
 
   addTodo() {
     this.router.navigateByUrl('/add-todo');
