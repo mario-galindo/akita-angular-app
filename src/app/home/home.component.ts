@@ -23,16 +23,16 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.todoQuery.getLoading().subscribe((res) => {
       this.loading = res;
-      console.log(this.loading);
     });
 
     this.todoQuery.getTodos().subscribe((res) => {
       this.todos = res;
-      console.log(this.todos)
     });
 
+
+
     this.todoQuery
-      .getLoaded() // esto trae falso
+      .getLoaded() 
       .pipe(
         take(1),
         filter((res) => !res),
