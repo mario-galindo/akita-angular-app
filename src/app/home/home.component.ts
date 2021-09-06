@@ -22,10 +22,10 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     
-    this.todoQuery.getLoading().subscribe((res) => {
+    this.todoQuery.getIsLoading().subscribe((res) => {
       this.loading = res;
     });
-
+    
     this.todoQuery.getTodos().subscribe((res) => {
       this.todos = res;
     });
@@ -41,22 +41,34 @@ export class HomeComponent implements OnInit {
           this.todoStore.setLoading(true);
           return this.apiService.getTodos();
         })
-      )
-      .subscribe(
-        (res) => {
-          this.todoStore.update((state) => {
-            return {
-              todos: res,
-              isLoaded:true
-            };
-          });
-          this.todoStore.setLoading(false);
-        },
-        (err) => {
-          console.log(err);
-          this.todoStore.setLoading(false);
-        }
-      );
+      ).subscribe(res => {
+        console.log(res)
+
+        this.todoStore.update(state => {
+          return{
+            isLoaded:true,
+            todos:res
+          }
+        })
+        
+        this.todoStore.setLoading(false);
+      })
+
+      // .subscribe(
+      //   (res) => {
+      //     this.todoStore.update((state) => {
+      //       return {
+      //         todos: res,
+      //         isLoaded:true
+      //       };
+      //     });
+      //     this.todoStore.setLoading(false);
+      //   },
+      //   (err) => {
+      //     console.log(err);
+      //     this.todoStore.setLoading(false);
+      //   }
+      // );
   }
 
   addTodo() {

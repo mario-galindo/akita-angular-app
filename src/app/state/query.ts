@@ -20,7 +20,7 @@ export class TodoQuery extends Query<TodoState> {
     return this.select((state) => state.isLoaded);
   }
 
-  getLoading(): Observable<boolean> {
+  getIsLoading(): Observable<boolean> {
     return this.selectLoading();
   }
 }
