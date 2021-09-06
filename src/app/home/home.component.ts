@@ -21,6 +21,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    
     this.todoQuery.getLoading().subscribe((res) => {
       this.loading = res;
     });
