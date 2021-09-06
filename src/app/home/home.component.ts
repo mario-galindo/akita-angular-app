@@ -46,6 +46,7 @@ export class HomeComponent implements OnInit {
           this.todoStore.update((state) => {
             return {
               todos: res,
+              isLoaded:true
             };
           });
           this.todoStore.setLoading(false);
